@@ -1,0 +1,5 @@
+Test,Method,Statistic,p_value,Conclusion,Interpretation
+Buffer Comparison (12% vs 5%),Wilcoxon signed-rank,2.0,1.6729454079174543e-165,Reject H0,12% significantly reduces VaR95
+Death Spiral (Dynamic vs Static),Mann-Whitney U (tail) + Bootstrap CI,3044.0,8.848409810744228e-07,Reject H0,"Feedback amplifies tail risk by 5.8%, 95% CI excludes 0"
+Verra Crisis Backtest,Monte Carlo Confidence Test,-1.038202200162008,0.0376,Marginal pass (conservative),Model captured crisis magnitude (actual in bottom 4% of predictions)
+Optimal Buffer Regression (σ coefficient),t-test,11.269492136908104,5.082842591264125e-09,Reject H0,Volatility significantly affects optimal buffer

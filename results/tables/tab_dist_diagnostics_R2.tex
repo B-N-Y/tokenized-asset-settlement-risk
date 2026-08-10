@@ -1,0 +1,17 @@
+\begin{table}[tbp]
+\centering
+\footnotesize
+\caption{Distributional diagnostics for BCT daily log returns. KS denotes the Kolmogorov-Smirnov statistic; BIC is the Bayesian Information Criterion (lower is better). The Generalized Error Distribution (GED) provides the best fit, supporting the use of heavy-tailed specifications in the simulation framework.}
+\label{tab:dist_diagnostics}
+\begin{tabular}{l c c c c}
+\hline
+Distribution & KS Stat. & KS $p$-value & Log-Lik & BIC \\
+\hline
+  GED & 0.0233 & 0.3696 & 2914.3 & -5806.6 \\
+  Student-t & 0.0288 & 0.1529 & 2886.7 & -5751.4 \\
+  Laplace & 0.0692 & $<0.0001$ & 2796.1 & -5577.6 \\
+  Skew-Normal & 0.1649 & $<0.0001$ & 2294.1 & -4566.1 \\
+  Normal & 0.1641 & $<0.0001$ & 2287.0 & -4559.3 \\
+\hline
+\end{tabular}
+\end{table}

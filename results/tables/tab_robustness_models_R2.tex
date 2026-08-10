@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering
+\footnotesize
+\caption{Optimal buffer requirements under alternative price models. All models are calibrated to $\sigma = 87\%$ and $\tau = 1.5$ days. The 2.5 pp variation across the tested specifications (range: 11.0\%--13.5\%) summarizes structural sensitivity within this grid; it is not external model validation.}
+\label{tab:robustness_models}
+\begin{tabular}{l c c}
+\hline
+Model & Optimal Buffer & Breach Prob \\
+\hline
+GBM & 12.4\% & 4.8\% \\
+Merton Jump & 13.5\% & 5.2\% \\
+Student-$t$ ($\nu{=}5$) & 12.0\% & 5.0\% \\
+GARCH(1,1) & 11.0\% & 5.2\% \\
+\hline
+\end{tabular}
+\end{table}

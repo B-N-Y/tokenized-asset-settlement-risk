@@ -1,0 +1,14 @@
+\begin{table}[t]
+\centering
+\footnotesize
+\caption{Bridge architecture at empirical volatility ($\sigma{=}0.87$, $\tau_s{=}1.5$) under 0 and 5\% collateral buffers. Medians computed over $N{=}3000$ simulation paths. A 5\% buffer roughly halves the tail metrics but does not eliminate under-collateralization; see Section~\ref{sec:optimal-buffer} for the $\sim$12\% buffer required at this volatility.}
+\label{tab:bridge_baselines}
+\begin{tabular}{l c c c}
+\hline
+Scenario & VaR$_{95}$ (USD) & ES$_{95}$ (USD) & $\widehat{\mathbb{P}}_{\mathrm{UC}}$ \\
+\hline
+No Buffer & 0.102 & 0.142 & 0.510 \\
+5\% Buffer & 0.057 & 0.096 & 0.205 \\
+\hline
+\end{tabular}
+\end{table}

@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering
+\footnotesize
+\begin{tabular}{l l c c l}
+\hline
+Test & Method & Statistic & $p$-value & Conclusion \\
+\hline
+Buffer Comparison (12% vs 5%) & Wilcoxon signed-rank & 2.00 & 1.673e-165 & Reject \\
+Death Spiral (Dynamic vs Static) & Mann-Whitney U (tail... & 3044.00 & 8.848e-07 & Reject \\
+Verra Crisis Backtest & Monte Carlo Confiden... & -1.04 & 0.038 & Fail to reject \\
+Optimal Buffer Regression (σ coeffi... & t-test & 11.27 & 5.083e-09 & Reject \\
+\hline
+\end{tabular}
+\caption{Summary of formal statistical hypothesis tests. All tests use $\alpha = 0.05$.}
+\label{tab:statistical_tests}
+\end{table}

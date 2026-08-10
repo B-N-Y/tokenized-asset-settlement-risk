@@ -1,0 +1,13 @@
+date,bct_price,event,event_type
+2021-10-14,8.6,BCT Launch - Toucan Protocol goes live,launch
+2022-01-01,6.5,Market peak period,normal
+2022-05-25,2.5,Verra bans retired credit tokenization,policy_shock
+2022-08-01,1.8,Post-ban market stabilization,normal
+2023-01-17,0.9,Day before Guardian article,normal
+2023-01-18,0.75,Guardian publishes '90% worthless' investigation,integrity_crisis
+2023-01-20,0.5,Market panic accelerates,integrity_crisis
+2023-01-25,0.3,Crisis low - maximum panic,integrity_crisis
+2023-02-01,0.4,Dead cat bounce,recovery
+2023-06-01,0.15,Extended bear market,normal
+2024-01-01,0.12,Low liquidity era,normal
+2025-01-08,0.1,Current market state,normal

@@ -1,0 +1,5 @@
+coin_id,vs_currency,days_used_for_fetch,n_daily_bars_total,window_days,sigma_ann,sigma_ann_winsor_1_99,sigma_ann_mad,type
+toucan-protocol-base-carbon-tonne,usd,365,364,365,0.8269446763537864,0.655314415581853,0.31493363093217264,summary_365d
+toucan-protocol-base-carbon-tonne,usd,365,364,90,0.8480041257876368,0.7806428590056281,0.32387664319870196,compare_windows
+toucan-protocol-base-carbon-tonne,usd,365,364,180,0.677718577019411,0.6106269528375604,0.2794810217822478,compare_windows
+toucan-protocol-base-carbon-tonne,usd,365,364,365,0.8269446763537864,0.655314415581853,0.31493363093217264,compare_windows
