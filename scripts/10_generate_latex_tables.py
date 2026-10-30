@@ -236,6 +236,18 @@ def generate_empirical_calibration_table():
     """Generate Table: Empirical Calibration Parameters."""
     try:
         df = pd.read_csv(os.path.join(RESULTS_DIR, "empirical_calibration.csv"))
+
+        # Accept both the legacy long form (Parameter, Value) and the current
+        # one-row wide form written by the empirical-analysis pipeline.
+        if {"Parameter", "Value"}.issubset(df.columns):
+            parameter_values = list(zip(df["Parameter"], df["Value"]))
+        elif len(df) == 1:
+            parameter_values = list(df.iloc[0].items())
+        else:
+            raise ValueError(
+                "empirical_calibration.csv must be long-form (Parameter, Value) "
+                "or a one-row wide table"
+            )
         
         latex = r"""\begin{table}[t]
 \centering
@@ -245,10 +257,9 @@ def generate_empirical_calibration_table():
 Parameter & Value \\
 \hline
 """
-        for _, row in df.iterrows():
-            param = row['Parameter'].replace('_', ' ').title()
-            val = row['Value']
-            if isinstance(val, float):
+        for raw_param, val in parameter_values:
+            param = str(raw_param).replace('_', ' ').title()
+            if isinstance(val, (float, np.floating)):
                 if abs(val) > 1:
                     latex += f"{param} & {val:.2f} \\\\\n"
                 else:
@@ -371,15 +382,15 @@ Window (days) & $\sigma_{\text{ann}}$ & Winsorized & MAD-based \\
         print(f"✗ Validation vol: {e}")
 
 
-def generate_analytic_validation_table():
-    """Generate Table: cell-by-cell validation of the Bridge buffer law (Prop 1)."""
+def generate_analytic_consistency_table():
+    """Generate the cell-by-cell consistency check for the Bridge buffer benchmark."""
     try:
         df = pd.read_csv(os.path.join(RESULTS_DIR, "optimal_buffer_grid.csv")).sort_values(["sigma", "delay"])
         latex = r"""\begin{table}[htbp]
 \centering
 \footnotesize
 \renewcommand{\arraystretch}{1.05}
-\caption{Analytical validation of the Bridge buffer law (Proposition~\ref{prop:buffer}). For each volatility--delay cell, the simulated optimal buffer $c^*_{\mathrm{sim}}$ (from Table~\ref{tab:optimal_buffer}, $P(\text{breach})\le 5\%$) is compared with the leading-order analytical prediction $c^*_{\mathrm{pred}}=0.104\,\sigma\sqrt{\tau_s}$ ($\kappa=z_{0.95}/\sqrt{252}$). The implied coefficient $\hat\kappa=c^*_{\mathrm{sim}}/(\sigma\sqrt{\tau_s})$ is near-constant ($0.107$--$0.119$, mean $0.113$) across a $2.9\times$ range in $\sigma$ and a $2.5\times$ range in $\tau_s$, confirming the $\sigma\sqrt{\tau_s}$ scaling. The analytical value $0.104$ slightly underpredicts, with the mild upward drift in $\hat\kappa$ as $\sigma$ rises reflecting the Poisson-distributed settlement delay and the $-\tfrac{1}{2}\sigma^{2}$ It\^{o} drift term omitted from the leading-order pure-diffusion benchmark. The $c^*_{\mathrm{sim}}$ values are reproduced from Table~\ref{tab:optimal_buffer} for direct comparison.}
+\caption{Analytical--simulation consistency check for the Bridge collateral-buffer benchmark (Proposition~\ref{prop:buffer}). For each volatility--delay cell, the simulated optimal buffer $c^*_{\mathrm{sim}}$ (from Table~\ref{tab:optimal_buffer}, $P(\text{breach})\le 5\%$) is compared with the leading-order analytical prediction $c^*_{\mathrm{pred}}=0.104\,\sigma\sqrt{\tau_s}$ ($\kappa=z_{0.95}/\sqrt{252}$). The implied coefficient $\hat\kappa=c^*_{\mathrm{sim}}/(\sigma\sqrt{\tau_s})$ is near-constant ($0.107$--$0.119$, mean $0.113$) across a $2.9\times$ range in $\sigma$ and a $2.5\times$ range in $\tau_s$, showing internal agreement with the $\sigma\sqrt{\tau_s}$ functional form over the tested grid. This comparison checks implementation consistency; it does not validate the assumptions or establish a universal coefficient. The analytical value $0.104$ slightly underpredicts, with the mild upward drift in $\hat\kappa$ as $\sigma$ rises reflecting the Poisson-distributed settlement delay and the $-\tfrac{1}{2}\sigma^{2}$ It\^{o} drift term omitted from the leading-order pure-diffusion benchmark. The $c^*_{\mathrm{sim}}$ values are reproduced from Table~\ref{tab:optimal_buffer} for direct comparison.}
 \label{tab:analytic_validation}
 \begin{tabular}{ccccc}
 \hline
@@ -402,9 +413,9 @@ $\sigma_{\mathrm{ann}}$ & $\tau_s$ (d) & $c^*_{\mathrm{sim}}$ (\%) & $c^*_{\math
 """
         with open(os.path.join(OUTPUT_DIR, "tab_analytic_validation_R2.tex"), "w") as f:
             f.write(latex)
-        print("✓ tab_analytic_validation_R2.tex")
+        print("✓ tab_analytic_validation_R2.tex (consistency check)")
     except Exception as e:
-        print(f"✗ Analytic validation: {e}")
+        print(f"✗ Analytic consistency check: {e}")
 
 
 def main():
@@ -422,7 +433,7 @@ def main():
     generate_summary_metrics_table()
     generate_optimal_buffer_table()
     generate_validation_vol_table()
-    generate_analytic_validation_table()
+    generate_analytic_consistency_table()
     
     print("\n" + "=" * 60)
     print(f"Tables written to: {OUTPUT_DIR}")

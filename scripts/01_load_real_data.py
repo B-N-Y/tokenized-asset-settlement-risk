@@ -19,7 +19,10 @@ import pandas as pd
 import numpy as np
 from datetime import datetime
 
-DATA_DIR = "data"
+# Paths are resolved relative to this file, so the script runs from any
+# working directory (the other scripts follow the same convention).
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(SCRIPT_DIR, "..", "data", "raw")
 
 
 def load_coinmarketcap_csv(filepath):
@@ -31,8 +34,10 @@ def load_coinmarketcap_csv(filepath):
     - open, high, low, close
     - volume, marketCap
     """
-    df = pd.read_csv(filepath)
-    
+    # The CoinMarketCap web export is semicolon-separated; other exports use
+    # commas, so the separator is detected instead of assumed.
+    df = pd.read_csv(filepath, sep=None, engine="python")
+
     # Detect column names (CMC uses various formats)
     date_cols = [c for c in df.columns if 'time' in c.lower() or 'date' in c.lower()]
     price_cols = [c for c in df.columns if c.lower() in ['close', 'price', 'open']]
@@ -97,7 +102,7 @@ def load_generic_csv(filepath):
     """
     Load from any CSV with flexible column detection.
     """
-    df = pd.read_csv(filepath)
+    df = pd.read_csv(filepath, sep=None, engine="python")
     print(f"Columns found: {list(df.columns)}")
     
     # Try to find date column
@@ -207,11 +212,19 @@ def calibrate_from_real_data(df):
 
 def main():
     """
-    Main function - looks for CSV files in data/ directory.
+    Optional helper: inspect a raw price export and print calibration figures.
+
+    The published pipeline does not depend on this script. Script 02 reads the
+    CoinMarketCap export directly and writes the canonical cleaned series, so
+    this script only reads raw exports and writes a separate preview file.
     """
-    print("Looking for CSV files in data/ directory...")
-    
-    csv_files = [f for f in os.listdir(DATA_DIR) if f.endswith('.csv') and 'bct' in f.lower()]
+    print(f"Looking for raw price exports in {DATA_DIR} ...")
+
+    derived = {"bct_cleaned.csv", "bct_prices.csv"}
+    csv_files = [
+        f for f in os.listdir(DATA_DIR)
+        if f.endswith('.csv') and 'bct' in f.lower() and f not in derived
+    ]
     
     if not csv_files:
         print("\nNo BCT CSV files found!")
@@ -227,10 +240,11 @@ def main():
         df = load_generic_csv(filepath)
         
         if not df.empty:
-            # Save cleaned version
-            clean_path = os.path.join(DATA_DIR, f"bct_cleaned.csv")
+            # Written under a separate name so that the canonical cleaned
+            # series produced by script 02 is never overwritten.
+            clean_path = os.path.join(DATA_DIR, "bct_loader_preview.csv")
             df.to_csv(clean_path, index=False)
-            print(f"✓ Cleaned data saved to {clean_path}")
+            print(f"✓ Preview of the parsed series saved to {clean_path}")
             
             # Calibrate
             params = calibrate_from_real_data(df)

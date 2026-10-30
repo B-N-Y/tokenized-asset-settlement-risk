@@ -46,6 +46,20 @@ Monte Carlo stress testing framework for tokenized carbon markets, comparing **B
 
 ## Usage
 
+The whole pipeline runs with one command, in the order used for the published
+results:
+
+```bash
+pip install -r requirements.txt
+bash run_all.sh
+```
+
+[REPRODUCIBILITY.md](REPRODUCIBILITY.md) gives the exact environment used to
+verify the published results, the mapping from each table and figure to the
+script that produces it, and the values to check first.
+
+The steps can also be run one at a time:
+
 ```bash
 # Install dependencies
 pip install -r requirements.txt
@@ -53,7 +67,8 @@ pip install -r requirements.txt
 # The analysis scripts resolve data/output paths relative to scripts/.
 cd scripts
 
-# 1. Load & clean the CoinMarketCap price export (already included in data/raw/)
+# Optional helper: parse a raw price export and print calibration figures.
+# The pipeline does not depend on it; script 02 reads the export directly.
 python 01_load_real_data.py
 
 # 2. Empirical analysis & calibration (writes bct_cleaned.csv, empirical_calibration.csv)
