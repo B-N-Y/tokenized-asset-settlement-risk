@@ -19,7 +19,6 @@ SCRIPTS=(
   08_sensitivity_elasticity.py      # trust-elasticity sweep
   09_statistical_tests.py           # hypothesis tests
   11_distributional_diagnostics.py  # goodness of fit, ARCH-LM, variance ratio
-  12_cross_market_correlation.py    # auxiliary cross-market checks
   13_architecture_dominance.py      # Bridge versus Native threshold
   14_regenerate_summary_csvs.py     # summary CSVs used by the table generator
   15_consistency_reruns.py          # H6/TOST, variance decomposition
@@ -41,9 +40,21 @@ for s in "${SCRIPTS[@]}"; do
   fi
 done
 
-if [ "$fail" -eq 0 ]; then
-  printf '\nAll scripts completed. Outputs are in results/tables, results/grids and results/figures.\n'
-else
+if [ "$fail" -ne 0 ]; then
   printf '\nPipeline stopped on an error.\n'
   exit 1
+fi
+
+printf '\nAll scripts completed. Outputs are in results/tables, results/grids and results/figures.\n'
+
+# Auxiliary check. It downloads benchmark series (BTC-USD, ETH-USD, KRBN) from
+# Yahoo Finance at run time, so it needs network access and can be rate
+# limited. The article does not report its output, and a failure here leaves
+# every published result intact.
+printf '\n=== 12_cross_market_correlation.py (optional, needs network access)\n'
+if MPLBACKEND=Agg "$PY" 12_cross_market_correlation.py; then
+  printf '[done] 12_cross_market_correlation.py\n'
+else
+  printf '[skipped] 12_cross_market_correlation.py could not download the benchmark series.\n'
+  printf '          This is an auxiliary check and no published result depends on it.\n'
 fi

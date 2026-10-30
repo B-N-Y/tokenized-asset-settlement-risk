@@ -118,6 +118,18 @@ Two known deviations, neither of which affects a published value:
    article does not report. Its p-values move in the fifth decimal place
    (1.3e-4) across SciPy builds.
 
+Two points about the order of execution:
+
+- `scripts/12_cross_market_correlation.py` downloads benchmark series
+  (BTC-USD, ETH-USD, KRBN) from Yahoo Finance while it runs, so it needs
+  network access and can be refused by rate limiting. `run_all.sh` therefore
+  runs it last and treats a failure as a skipped step. No published result
+  depends on it.
+- `scripts/07_robustness_price_models.py` writes a preliminary version of
+  `tab_robustness_models_R2.tex`, which `scripts/10_generate_latex_tables.py`
+  then replaces with the version used in the article. Run the pipeline to the
+  end, or that file stays in its preliminary five-column form.
+
 ## 6. Note on exactness
 
 The simulations are seeded, so a given environment reproduces its own output

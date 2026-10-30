@@ -17,7 +17,7 @@ Monte Carlo stress testing framework for tokenized carbon markets, comparing **B
 │   ├── 09_statistical_tests.py          # Hypothesis tests (Wilcoxon, Mann-Whitney, MC test)
 │   ├── 10_generate_latex_tables.py      # LaTeX tables for the manuscript (run after 07 and 14)
 │   ├── 11_distributional_diagnostics.py # Goodness-of-fit, ARCH-LM, variance-ratio tests
-│   ├── 12_cross_market_correlation.py   # Auxiliary cross-market correlation checks
+│   ├── 12_cross_market_correlation.py   # Auxiliary cross-market checks (downloads benchmarks; needs network)
 │   ├── 13_architecture_dominance.py     # Bridge-vs-Native dominance threshold (Prop. 4)
 │   ├── 14_regenerate_summary_csvs.py    # Refresh summary CSVs consumed by Script 10
 │   ├── 15_consistency_reruns.py         # H6/TOST, variance decomposition, Prop. 3 checks
@@ -92,8 +92,12 @@ python 09_statistical_tests.py
 
 # 8. Distributional diagnostics & architecture dominance
 python 11_distributional_diagnostics.py
-python 12_cross_market_correlation.py
 python 13_architecture_dominance.py
+
+# Optional: auxiliary cross-market check. It downloads BTC-USD, ETH-USD and
+# KRBN from Yahoo Finance while it runs, so it needs network access and can be
+# rate limited. No result reported in the article depends on it.
+python 12_cross_market_correlation.py
 
 # 9. Refresh summary CSVs consumed by the LaTeX table generator
 python 14_regenerate_summary_csvs.py
